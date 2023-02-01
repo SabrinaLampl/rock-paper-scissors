@@ -1,52 +1,47 @@
-
+function playRound(playerSelection, computerSelection) {
+  if (playerSelection === computerSelection) {
+    result.textContent = "It's a tie! The same was selected.";
+    return "tie";
+  }
+  else if (playerSelection === "scissors" && computerSelection === "paper") {
+    result.textContent = "You Won! Scissors beats Paper.";
+    return "player";
+  }
+  else if (playerSelection === "rock" && computerSelection === "scissors") {
+    result.textContent = "You Won! Rock beats Scissors.";
+    return "player";
+  }
+  else if (playerSelection === "paper" && computerSelection === "rock") {
+    result.textContent = "You Won! Paper beats Rock.";
+    return "player";
+  }
+  else {
+    result.textContent = `You Lose! ${computerSelection} beats ${playerSelection}.`;
+    return "computer";
+  }
+}
 
 function getComputerChoice() {
   const choice = ["rock", "paper", "scissors"];
   return choice[Math.floor(Math.random() * choice.length)];
 }
 
+let playerCount = 0;
+let computerCount = 0;
 
+const buttons = document.querySelectorAll('button');
+const result = document.querySelector('#result');
+const score = document.querySelector('#score');
 
-
-
-function playRound(playerSelection, computerSelection) {
-  const playerSelectionLowerCase = playerSelection.toLowerCase();
-
-  if (playerSelectionLowerCase === computerSelection) {
-    console.log("It's a tie! The same was selected.");
-    return "tie";
-  }
-  else if (playerSelectionLowerCase === "scissors" && computerSelection === "paper") {
-    console.log("You Won! Scissors beats Paper.");
-    return "player";
-  }
-  else if (playerSelectionLowerCase === "rock" && computerSelection === "scissors") {
-    console.log("You Won! Rock beats Scissors.");
-    return "player";
-  }
-  else if (playerSelectionLowerCase === "paper" && computerSelection === "rock") {
-    console.log("You Won! Paper beats Rock.");
-    return "player";
-  }
-  else {
-    console.log(`You Lose! ${computerSelection} beats ${playerSelectionLowerCase}.`);
-    return "computer";
-  }
-}
-
-
-
-function game() {
-  let playerCount = 0;
-  let computerCount = 0;
-
-  for (let i = 0; i < 5; i++) {
-    const player = prompt("Rock, Paper or Scissors?");
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+  
+    const playerSelection = button.id;
     const computer = getComputerChoice();
 
-    const result = playRound(player, computer);
+    const winner = playRound(playerSelection, computer);
     
-    switch (result) {
+    switch (winner) {
       case "player":
         playerCount++;
         break;
@@ -56,14 +51,18 @@ function game() {
       case "tie":
         break;
     }
-  }
 
-  if (playerCount > computerCount) {
-    console.log(`You won with ${playerCount} to ${computerCount}`);
-  }
-  else {
-    console.log(`You lost with ${playerCount} to ${computerCount}`)
-  }
-}
+    score.textContent = `You: ${playerCount} Computer: ${computerCount}`;
 
-game();
+    if (playerCount === 5) {
+      score.textContent = `You won with ${playerCount} to ${computerCount}`;
+      playerCount = 0;
+      computerCount = 0;
+    }
+    if (computerCount === 5) {
+      score.textContent = `You lost with ${playerCount} to ${computerCount}`;
+      playerCount = 0;
+      computerCount = 0;
+    }
+  })
+})
